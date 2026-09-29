@@ -1,5 +1,5 @@
 {
-  "schema_version": "single-photon-mei-stage1-1",
+  "schema_version": "single-photon-mei-stage1-2",
   "paths": {
     "neural_data": "../data/neural_data.h5",
     "stimulus_image_folder": "../data/stimulus_images",
@@ -49,7 +49,6 @@
   "features": {
     "image_size": 224,
     "resize": "bilinear",
-    "spatial_pool_size": 4,
     "l2_normalize": true,
     "amp": true
   },

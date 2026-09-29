@@ -65,7 +65,7 @@ def result_paths(config: dict, model_key: str, layer: str) -> tuple[Path, Path, 
 
 
 def validate_stage1_config(config: dict) -> None:
-    if config.get("schema_version") != "single-photon-mei-stage1-1":
+    if config.get("schema_version") != "single-photon-mei-stage1-2":
         raise ValueError("Unsupported Stage-1 config schema")
     feature = config["features"]
     encoding = config["encoding"]
@@ -134,7 +134,6 @@ def _extract_features(
             values = adapt_activation(
                 activation,
                 family=spec["family"],
-                pool_size=int(feature["spatial_pool_size"]),
                 l2_normalize=bool(feature["l2_normalize"]),
                 num_prefix_tokens=prefix_tokens,
             )
@@ -151,7 +150,7 @@ def _extract_features(
             "feature_shape": list(values.shape),
             "preprocess": spec["preprocess"],
             "image_size": int(feature["image_size"]),
-            "spatial_pool_size": int(feature["spatial_pool_size"]),
+            "spatial_pooling": "none",
             "l2_normalize": bool(feature["l2_normalize"]),
             **weight_metadata,
         }

@@ -164,7 +164,9 @@ Paths are resolved relative to the config file. At minimum, update:
 - checkpoint paths and hashes if your files differ
 - runtime device and batch sizes
 
-Stage 1 exposes candidate models/layers, image preprocessing, 4 × 4 spatial pooling, L2 normalization, PCA dimension, outer/inner folds, alpha grid, random seed, scoring, and ranking rules.
+Stage 1 exposes candidate models/layers, image preprocessing, full-resolution spatial-feature flattening, L2 normalization, PCA dimension, outer/inner folds, alpha grid, random seed, scoring, and ranking rules. No spatial pooling is applied: CNN feature maps are flattened at their native hook resolution, while DINOv2 patch tokens are restored to their native square grid and then flattened.
+
+Stage 1 schema `single-photon-mei-stage1-2` is not feature-compatible with earlier 4 × 4-pooled runs. Use a new output directory and rerun Stage 1 and Stage 2 from the beginning. Native-resolution features, especially shallow ResNet layers, require substantially more disk space, host memory, and PCA compute than pooled features.
 
 Stage 2 exposes Top-N or tuning-diverse selection, OOF/FDR eligibility, tuning-correlation threshold, per-target readout settings, regimes, neural guidance scales, seeds, image size, denoising steps, dtype, and peer-review thresholds. Version 1 intentionally rejects non-empty prompts, classifier-free guidance, SAG, and generation batches larger than one because those branches were not validated.
 

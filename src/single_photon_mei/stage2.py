@@ -286,7 +286,6 @@ def _make_objective(extractor, spec, layer, weight, bias, feature_config, device
         features = adapt_activation(
             activation,
             family=spec["family"],
-            pool_size=int(feature_config["spatial_pool_size"]),
             l2_normalize=bool(feature_config["l2_normalize"]),
             num_prefix_tokens=prefix,
         )
@@ -306,7 +305,6 @@ def _predict_image(image, extractor, spec, layer, weight, bias, feature_config, 
         features = adapt_activation(
             activation,
             family=spec["family"],
-            pool_size=int(feature_config["spatial_pool_size"]),
             l2_normalize=bool(feature_config["l2_normalize"]),
             num_prefix_tokens=prefix,
         )
@@ -470,7 +468,6 @@ def _features_for_images(stage1: dict, config: dict, model_key: str, layer: str,
             output.append(adapt_activation(
                 activation,
                 family=spec["family"],
-                pool_size=int(stage1["features"]["spatial_pool_size"]),
                 l2_normalize=bool(stage1["features"]["l2_normalize"]),
                 num_prefix_tokens=prefix,
             ).cpu().numpy())

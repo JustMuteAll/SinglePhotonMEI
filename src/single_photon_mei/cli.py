@@ -43,7 +43,7 @@ def main() -> None:
     args = parser().parse_args()
     config = load_config(args.config)
     if args.command == "validate":
-        if config.get("schema_version") == "single-photon-mei-stage1-1":
+        if config.get("schema_version") == "single-photon-mei-stage1-2":
             validate_stage1_config(config)
             weights = project_paths(config)["weights"]
             for key, spec in config["models"].items():

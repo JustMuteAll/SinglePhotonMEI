@@ -136,7 +136,6 @@ def adapt_activation(
     activation: torch.Tensor,
     *,
     family: str,
-    pool_size: int,
     l2_normalize: bool,
     num_prefix_tokens: int = 1,
 ) -> torch.Tensor:
@@ -150,5 +149,5 @@ def adapt_activation(
         activation = patches.transpose(1, 2).reshape(patches.shape[0], patches.shape[2], side, side)
     if activation.ndim != 4:
         raise ValueError(f"Spatial activation must be 4D, got {activation.shape}")
-    features = F.adaptive_avg_pool2d(activation, (pool_size, pool_size)).flatten(1).float()
+    features = activation.flatten(1).float()
     return F.normalize(features, p=2, dim=1, eps=1e-12) if l2_normalize else features

@@ -1,9 +1,30 @@
 from pathlib import Path
 
 import pytest
+import torch
 
 from single_photon_mei.stage2 import validate_stage2_config
-from single_photon_mei.utils.models import load_backbone
+from single_photon_mei.utils.models import adapt_activation, load_backbone
+
+
+def test_cnn_activation_is_flattened_without_spatial_pooling():
+    activation = torch.arange(2 * 3 * 5 * 7, dtype=torch.float32).reshape(2, 3, 5, 7)
+    features = adapt_activation(activation, family="resnet50", l2_normalize=False)
+    assert features.shape == (2, 3 * 5 * 7)
+    assert torch.equal(features, activation.flatten(1))
+
+
+def test_vit_tokens_are_flattened_without_spatial_pooling():
+    activation = torch.arange(2 * 21 * 3, dtype=torch.float32).reshape(2, 21, 3)
+    features = adapt_activation(
+        activation,
+        family="dinov2_vit",
+        l2_normalize=False,
+        num_prefix_tokens=5,
+    )
+    expected = activation[:, 5:, :].transpose(1, 2).reshape(2, -1)
+    assert features.shape == (2, 3 * 4 * 4)
+    assert torch.equal(features, expected)
 
 
 def test_missing_checkpoint_has_no_fallback(tmp_path):

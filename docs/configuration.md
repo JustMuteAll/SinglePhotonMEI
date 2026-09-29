@@ -4,7 +4,7 @@
 
 `paths` locates the H5, image folder, offline weights and output. `data` maps H5 dataset names and the image-ID filename rule. Each `models` entry defines an architecture, family, local checkpoint, SHA-256, candidate layers and preprocessing statistics.
 
-Result-bearing feature settings are image size, bilinear resize, 4 x 4 spatial pooling, L2 normalization and AMP. Encoding settings are the Ridge alpha grid, outer/inner folds, shared-alpha mode, leakage-free PCA dimension, raw response scale, Pearson metric, shuffled folds, seed and fitted intercept. Ranking uses median OOF Pearson followed by mean Pearson, positive-score fraction and Top-50 mean when medians differ by less than the configured tolerance.
+Result-bearing feature settings are image size, bilinear resize, L2 normalization and AMP. Spatial activations are not pooled: CNN feature maps are flattened at the hook's native resolution, and DINOv2 patch tokens are restored to their native square grid before flattening. Encoding settings are the Ridge alpha grid, outer/inner folds, shared-alpha mode, leakage-free PCA dimension, raw response scale, Pearson metric, shuffled folds, seed and fitted intercept. Ranking uses median OOF Pearson followed by mean Pearson, positive-score fraction and Top-50 mean when medians differ by less than the configured tolerance.
 
 `stage1 run --model KEY` limits one execution to a configured model for HPC scheduling. The model subset, resolved-config hash, device and batch size are saved under `stage1/execution_scopes/`. This option does not alter scientific settings.
 
