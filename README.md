@@ -51,6 +51,47 @@ python -m pip install -e .
 
 ## Required inputs
 
+Prepare the neural data, stimulus images, runtime configs, and offline model weights before running the pipeline. A recommended project layout is:
+
+```text
+SinglePhotonMEI/
+├── data/
+│   ├── neural_data.h5
+│   └── stimulus_images/
+├── configs/
+│   ├── stage1.json
+│   └── stage2.json
+└── model_weights/
+```
+
+- `data/neural_data.h5`: pooled neural responses and the unit/pixel metadata used by both stages.
+- `data/stimulus_images/`: stimulus images aligned to the response rows through the image IDs stored in the H5 file.
+- `configs/stage1.json`: model, layer, feature-extraction, PCA, Ridge, cross-validation, path, and runtime settings for encoding-model selection.
+- `configs/stage2.json`: target-selection, final-readout, MEI-generation, peer-review, path, and runtime settings.
+- `model_weights/`: all backbone and diffusion weights required for fully offline execution. Arrange the files exactly as follows:
+
+```text
+SinglePhotonMEI/
+└── model_weights/
+    ├── alexnet/
+    │   └── alexnet-owt-7be5be79.pth
+    ├── resnet50/
+    │   └── resnet50-11ad3fa6.pth
+    ├── robust_resnet50/
+    │   └── resnet50_l2_eps0.5.ckpt
+    ├── dinov2/
+    │   └── model.safetensors
+    └── diffusion/
+        └── stable-diffusion-2-1-base/
+            ├── model_index.json
+            ├── scheduler/
+            ├── text_encoder/
+            ├── tokenizer/
+            ├── unet/
+            └── vae/
+```
+
+The paths in `stage1.json` and `stage2.json` must point to these local inputs. The repository does not download missing data or model weights at runtime.
 
 ## Configuration
 
