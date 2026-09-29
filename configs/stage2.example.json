@@ -1,0 +1,78 @@
+{
+  "schema_version": "single-photon-mei-stage2-1",
+  "stage1_config": "stage1.example.json",
+  "run_name": "tuning_diverse_r_lt_0p8",
+  "paths": {
+    "neural_data": "../data/neural_data.h5",
+    "stimulus_image_folder": "../data/stimulus_images",
+    "model_weights": "../model_weights",
+    "output": "../outputs/run_name"
+  },
+  "data": {
+    "datasets": {},
+    "image_id_base": 1,
+    "image_filename_pattern": "nsd_1000_{image_id:05d}.jpg"
+  },
+  "selection": {
+    "n_targets": 50,
+    "selection_strategy": "greedy_tuning_pearson",
+    "minimum_oof_r": 0,
+    "minimum_oof_r_strict": true,
+    "permutation_count": 1000,
+    "permutation_two_sided": true,
+    "fdr_method": "bh",
+    "maximum_fdr_q": 0.05,
+    "tuning_metric": "signed_pearson",
+    "maximum_pairwise_tuning_r": 0.8,
+    "pairwise_threshold_strict": true,
+    "random_state": 42
+  },
+  "readout": {
+    "alpha_mode": "per_target",
+    "alphas": [0.01, 0.1, 1, 10, 100, 1000, 10000, 100000, 1000000],
+    "cv_folds": 5,
+    "pca_components": 50,
+    "pca_mode": "leakage_free",
+    "response_normalization": "zscore_per_target",
+    "fit_intercept": true,
+    "random_state": 42
+  },
+  "generation": {
+    "diffusion_checkpoint": "diffusion/stable-diffusion-2-1-base",
+    "regimes": [
+      {"name": "natural", "neural_guidance_scale": 20},
+      {"name": "strong", "neural_guidance_scale": 80}
+    ],
+    "seeds": [1021, 2027, 3037, 4051, 5059],
+    "expected_images_per_target": 10,
+    "image_size": 512,
+    "steps": 50,
+    "scheduler": "DPMSolverMultistepScheduler",
+    "prompt": "",
+    "classifier_free_guidance_scale": 0,
+    "sag_scale": 0,
+    "dtype": "float16",
+    "batch_size": 1,
+    "objective": "maximize_target_z",
+    "target_preprocess_size": 224,
+    "target_resize": "bilinear"
+  },
+  "peer_review": {
+    "naturalness": {
+      "model_key": "dinov2_vitb14",
+      "layer": "blocks.11",
+      "pca_components": 50,
+      "neighbors": 5,
+      "maximum_percentile_by_regime": {"natural": 95, "strong": 99}
+    },
+    "maximum_clipping_fraction_by_regime": {"natural": 0.01, "strong": 0.05},
+    "primary_target_percentile": 99,
+    "peer_target_percentile": 95,
+    "minimum_peer_count": 2,
+    "peer_median_percentile": 95,
+    "peer_selectivity_percentile": 90,
+    "minimum_peer_selectivity_count": 2,
+    "minimum_passing_seeds_per_regime": 3
+  },
+  "runtime": {"device": "cuda", "evaluation_batch_size": 16}
+}

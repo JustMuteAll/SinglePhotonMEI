@@ -1,0 +1,28 @@
+# Local data, results, and model weights
+data/
+outputs/
+model_weights/**
+!model_weights/.gitkeep
+
+# Local validation artifacts and machine-specific smoke configs
+validation/baseline/
+validation/smoke_data/
+validation/smoke_run/
+configs/*.smoke.json
+
+# Python environments, packages, and caches
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+pytest-cache-files-*/
+
+# Editors and operating-system metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
